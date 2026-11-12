@@ -82,7 +82,7 @@ function lessonPage(i,step){
  if(step===1)body='<section class="panel"><h2>'+esc(l.rule)+'</h2><p>'+esc(l.explain)+'</p></section><section class="panel"><h2>Bài tập ngữ pháp</h2>'+checkForm(l.quiz,'grammar',key)+'</section>';
  if(step===2)body='<section class="panel"><h2>Nghe đoạn hội thoại</h2><p class="muted">Bạn có thể nghe nhiều lần trước khi trả lời.</p><audio controls preload="metadata" src="'+audioUrl(i+'-l')+'" aria-label="Hội thoại"></audio><div class="actions">'+button('Chậm 0.75×','speed',{value:'0.75',cls:'outline small'})+button('Bình thường 1×','speed',{value:'1',cls:'outline small'})+'</div></section><section class="panel">'+checkForm([l.listen],'listen',key)+'<details '+(feedbacks.has(key)?'':'hidden')+' id="transcript"><summary>Lời thoại và bản dịch</summary><div class="stack"><div lang="en">'+l.script.map(line=>'<p>'+esc(line)+'</p>').join('')+'</div><p class="muted">'+esc(l.translation)+'</p></div></details></section>';
  if(step===3)body='<section class="panel stack"><div><h2>Luyện nói</h2><p>'+esc(l.speak)+'</p></div><p class="example" lang="en">'+esc(l.model)+'</p><div class="actions">'+button('Nghe câu mẫu','audio',{value:i+'-s',icon:'sound'})+'</div><p class="muted">Nghe và nhại theo. Sau đó nói lại bằng thông tin của bạn.</p></section>';
- if(step===4)body='<section class="panel stack"><div><h2>Luyện viết</h2><p>'+esc(l.write)+'</p></div><form class="stack" data-form="writing" data-id="'+i+'"><label class="field">Câu trả lời của bạn<textarea required maxlength="2000" name="draft" placeholder="Viết bằng tiếng Anh…">'+esc(p.draft)+'</textarea></label><div><button class="button outline" type="submit">Lưu bài viết</button></div></form><details><summary>Xem bài mẫu và tự kiểm tra</summary><p lang="en">'+esc(l.sample)+'</p><p class="muted">'+esc(l.checks)+'</p></details></section>';
+ if(step===4)body='<section class="panel stack"><div><h2>Luyện viết</h2><p>'+esc(l.write)+'</p></div><form class="stack" data-form="writing" data-id="'+i+'"><label class="field">Câu trả lời của bạn<textarea required maxlength="2000" name="draft" placeholder="Viết bằng tiếng Anh…">'+esc(p.draft)+'</textarea></label><div class="actions"><button class="button primary" type="submit">Chấm bài</button>'+button('Xem kết quả mẫu','writing-demo')+'</div><div class="writing-feedback" role="status" aria-live="polite"></div></form><details><summary>Xem bài mẫu và tự kiểm tra</summary><p lang="en">'+esc(l.sample)+'</p><p class="muted">'+esc(l.checks)+'</p></details></section>';
  const footer='<div class="spread footer-actions">'+(step?link('Phần trước','bai/'+i+'/'+(step-1)):link('Lộ trình','lo-trinh'))+(step<4?link('Phần tiếp theo','bai/'+i+'/'+(step+1),'primary','right'):button(p.done?'Về lộ trình':'Hoàn thành bài','finish',{value:i,cls:'primary',icon:'check'}))+'</div>';
  layout(heading(l.title,(i===6?'Ôn tập':'Bài '+(i+1))+' · '+l.time+' phút · '+l.intro)+'<nav class="tabs" aria-label="Các phần của bài">'+tabs.map((title,j)=>'<a class="button '+(step===j?'soft':'outline')+'" '+(step===j?'aria-current="step"':'')+' href="#bai/'+i+'/'+j+'">'+(j+1)+'. '+title+'</a>').join('')+'</nav>'+body+footer,'Bài học','lo-trinh');
 }
@@ -164,6 +164,7 @@ document.addEventListener('click',async event=>{
  const target=event.target.closest('[data-action]');if(!target)return;
  const {action,value}=target.dataset;
  if(action==='audio')playFile(value);
+ if(action==='writing-demo')showWritingExample(target.closest('form'));
  if(action==='say-word')sayWord(state.words.find(w=>w.id===value));
  if(action==='speed'){
   const audio=document.querySelector('audio');stopSpeech();audio.playbackRate=Number(value);
@@ -246,7 +247,8 @@ document.addEventListener('submit',async event=>{
  if(type==='delete'&&await update(profile=>{profile.words=profile.words.filter(w=>w.id!==id)})){dialog.close();render();toast('Đã xóa từ.')}
  if(type==='writing'){
   const draft=read('draft');if(!draft){toast('Nhập câu trả lời của bạn.');return}
-  if(await update(profile=>{profile.progress[id]={...profile.progress[id],tab:4,draft}}))toast('Đã lưu bài viết.');
+  const saved=await update(profile=>{profile.progress[id]={...profile.progress[id],tab:4,draft}});
+  if(writingEndpoint||saved)await gradeWriting(form,draft,lessons[Number(id)].write);
  }
  if(type==='quiz'){
   const key=form.dataset.key, lesson=lessons[Number(key[0])], isListen=form.dataset.type==='listen';

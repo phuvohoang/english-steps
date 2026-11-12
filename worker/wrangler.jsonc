@@ -1,0 +1,10 @@
+{
+  "name": "english-steps-writing",
+  "main": "index.mjs",
+  "compatibility_date": "2026-11-12",
+  "ai": { "binding": "AI" },
+  "vars": { "ALLOWED_ORIGIN": "https://phuvohoang.github.io" },
+  "ratelimits": [
+    { "name": "GRADE_LIMIT", "namespace_id": "1901", "simple": { "limit": 6, "period": 60 } }
+  ]
+}

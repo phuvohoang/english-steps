@@ -14,3 +14,14 @@ Website tiếng Anh A0–A1. Sổ từ và tiến độ dùng IndexedDB theo đ�
 
 ## Tra từ
 Hộp Thêm từ tra hai chiều trong dữ liệu bài học, hỗ trợ tìm không dấu. Chọn một kết quả để điền nghĩa, ví dụ và gắn clip vào thẻ. Bài nghe–gõ chỉ đưa vào những thẻ có clip. Từ ngoài kho có thể nhập thủ công và dùng trong các chế độ ôn còn lại. Bản này chưa có dịch vụ tạo audio theo yêu cầu.
+
+## Chấm bài viết
+Tab Viết có nút **Xem kết quả mẫu** để thử giao diện diff. Để bật chấm AI thật, triển khai Worker trong thư mục `worker/` bằng tài khoản Cloudflare của bạn:
+
+```sh
+cd worker
+npx wrangler login
+npx wrangler deploy
+```
+
+Điền URL HTTPS của Worker, kèm đường dẫn `/grade`, vào thẻ meta `writing-endpoint` trong `docs/index.html` rồi push lại lên GitHub Pages. Worker dùng Workers AI binding và giới hạn 6 lượt/phút trên mỗi điểm phục vụ. `ALLOWED_ORIGIN` là origin của website GitHub Pages. Chấm bài gửi nội dung bài viết và đề bài tới Cloudflare khi người học bấm nút.
