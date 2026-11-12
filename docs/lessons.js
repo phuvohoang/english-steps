@@ -1,0 +1,85 @@
+const lessons = [
+{
+ title:"Chào hỏi", en:"Say hello", icon:"hand", color:"peach", time:15,
+ intro:"Chào ai đó và hỏi họ có khỏe không.",
+ words:[["hello","xin chào","Hello, Mai!"],["hi","chào","Hi, Tom!"],["good morning","chào buổi sáng","Good morning, Linh!"],["fine","khỏe, ổn","I'm fine, thank you."],["thank you","cảm ơn","Thank you, Ben."],["goodbye","tạm biệt","Goodbye, Anna!"]],
+ rule:"How are you?", explain:"Dùng “How are you?” để hỏi thăm. Bạn có thể trả lời “I'm fine, thank you.”. “I'm” là cách viết ngắn của “I am”.",
+ quiz:[["Điền từ · How ___ you?","are","How đi với are khi hỏi you."],["Chọn lời chào buổi sáng",["Good morning","Goodbye","Thank you"],"Good morning dùng khi gặp ai vào buổi sáng."],["Xếp câu · you / How / are","How are you","Đặt How đầu câu, sau đó là are và you."]],
+ script:["Good morning, Mai!","Hi, Tom! How are you?","I'm fine, thank you."],
+ translation:"Chào buổi sáng, Mai! — Chào Tom! Bạn khỏe không? — Tôi khỏe, cảm ơn.",
+ listen:["Tom trả lời thế nào?",["Tom khỏe.","Tom mệt.","Tom đói."]],
+ speak:"Chào một người bạn và hỏi họ có khỏe không.", model:"Hi, Mai! How are you?",
+ write:"Viết một lời chào và một câu hỏi thăm.", sample:"Hello, Ben! How are you?", checks:"Có lời chào và câu hỏi kết thúc bằng dấu hỏi."
+},
+{
+ title:"Giới thiệu bản thân", en:"Introduce yourself", icon:"user", color:"mint", time:20,
+ intro:"Nói tên, quê quán và nơi bạn đang sống.",
+ words:[["name","tên","My name is Linh."],["from","đến từ","I'm from Vietnam."],["live","sống","I live in Hanoi."],["city","thành phố","Hanoi is a city."],["meet","gặp","Nice to meet you."],["too","cũng","Nice to meet you, too."]],
+ rule:"My name is… / I'm from…", explain:"Dùng “My name is…” trước tên và “I'm from…” trước quê quán. Để nói nơi đang sống, dùng “I live in…”.",
+ quiz:[["Điền từ · My name ___ Linh.","is","Sau My name dùng is."],["Chọn câu nói về quê quán",["I'm from Vietnam.","My name is Linh.","Nice to meet you."],"From chỉ nơi bạn đến từ."],["Xếp câu · in / live / I / Hanoi","I live in Hanoi","Dùng I live in + địa danh."]],
+ script:["Hi, my name is Ben. I'm from Canada.","Hi, Ben! I'm Linh. I live in Hanoi.","Nice to meet you, Linh."],
+ translation:"Chào, tôi tên Ben. Tôi đến từ Canada. — Chào Ben! Tôi là Linh. Tôi sống ở Hà Nội. — Rất vui được gặp bạn, Linh.",
+ listen:["Linh đang sống ở đâu?",["Hà Nội","Canada","Đà Nẵng"]],
+ speak:"Nói tên và quê quán của bạn.", model:"My name is Linh. I'm from Vietnam.",
+ write:"Viết 3 câu giới thiệu tên, quê quán và nơi ở.", sample:"My name is Linh. I'm from Vietnam. I live in Hanoi.", checks:"Viết hoa tên riêng và dùng đúng from, in."
+},
+{
+ title:"Gia đình", en:"Talk about family", icon:"heart", color:"lilac", time:20,
+ intro:"Giới thiệu các thành viên trong gia đình.",
+ words:[["family","gia đình","This is my family."],["mother","mẹ","This is my mother."],["father","bố","This is my father."],["sister","chị hoặc em gái","I have one sister."],["brother","anh hoặc em trai","I have a brother."],["child","con, trẻ em","I have one child."]],
+ rule:"This is my… / I have…", explain:"Dùng “This is my…” khi giới thiệu một người. Dùng “I have…” để nói bạn có ai trong gia đình.",
+ quiz:[["Điền từ · This ___ my mother.","is","This is dùng khi giới thiệu một người."],["Chọn câu nói tôi có một em gái",["I have one sister.","I have one brother.","This is my father."],"Sister có nghĩa là chị hoặc em gái."],["Xếp câu · a / have / brother / I","I have a brother","I đứng đầu câu, tiếp theo là have a brother."]],
+ script:["This is my sister, Anna.","Hi, Anna! Do you have a brother?","Yes, I have one brother."],
+ translation:"Đây là chị gái tôi, Anna. — Chào Anna! Bạn có anh hoặc em trai không? — Có, tôi có một anh hoặc em trai.",
+ listen:["Anna có mấy anh hoặc em trai?",["Một","Hai","Ba"]],
+ speak:"Giới thiệu một người trong gia đình bạn.", model:"This is my sister, Anna.",
+ write:"Viết hai câu về gia đình bạn.", sample:"This is my mother. I have one sister.", checks:"Dùng my trước vai trò gia đình và one nếu muốn nói số lượng."
+},
+{
+ title:"Một ngày của tôi", en:"My daily routine", icon:"clock", color:"sky", time:20,
+ intro:"Kể những việc bạn làm hằng ngày và nói giờ.",
+ words:[["wake up","thức dậy","I wake up at seven."],["eat","ăn","I eat breakfast at eight."],["breakfast","bữa sáng","I eat breakfast at home."],["work","làm việc","I work at nine."],["go home","về nhà","I go home at six."],["sleep","ngủ","I sleep at ten."]],
+ rule:"I + động từ / at + giờ", explain:"Dùng động từ nguyên mẫu sau “I”, như “I work”. Đặt “at” trước giờ, ví dụ “at nine”.",
+ quiz:[["Điền từ · I wake up ___ seven.","at","Dùng at trước một giờ cụ thể."],["Chọn câu nói tôi ăn sáng lúc tám giờ",["I eat breakfast at eight.","I go home at eight.","I work at eight."],"Eat breakfast nghĩa là ăn sáng."],["Xếp câu · ten / sleep / I / at","I sleep at ten","I sleep đứng trước cụm at ten."]],
+ script:["What time do you wake up?","I wake up at seven. I eat breakfast at eight.","I go to work at nine."],
+ translation:"Bạn thức dậy lúc mấy giờ? — Tôi thức dậy lúc bảy giờ. Tôi ăn sáng lúc tám giờ. — Tôi đi làm lúc chín giờ.",
+ listen:["Người nói thức dậy lúc mấy giờ?",["7 giờ","8 giờ","9 giờ"]],
+ speak:"Nói bạn thức dậy và ăn sáng lúc mấy giờ.", model:"I wake up at seven. I eat breakfast at eight.",
+ write:"Viết ba câu về các việc bạn làm mỗi ngày.", sample:"I wake up at seven. I work at nine. I go home at six.", checks:"Mỗi câu bắt đầu bằng I và dùng at trước giờ."
+},
+{
+ title:"Gọi đồ ăn và thức uống", en:"Order food and drinks", icon:"cup", color:"peach", time:20,
+ intro:"Gọi món lịch sự ở quán cà phê hoặc nhà hàng.",
+ words:[["coffee","cà phê","I'd like a coffee, please."],["tea","trà","I'd like a tea, please."],["water","nước","I'd like some water, please."],["sandwich","bánh mì kẹp","I'd like a sandwich."],["menu","thực đơn","Can I see the menu, please?"],["please","làm ơn, vui lòng","A sandwich, please."]],
+ rule:"I'd like…", explain:"Dùng “I'd like…” để gọi món lịch sự. Dùng “a” với một phần như “a sandwich”, hoặc “some” với “water”.",
+ quiz:[["Điền từ · I'd ___ a coffee, please.","like","I'd like là mẫu câu gọi món."],["Chọn câu gọi nước",["I'd like some water.","I'd like a sandwich.","I'd like a coffee."],"Water nghĩa là nước."],["Xếp câu · a / I'd / tea / like","I'd like a tea","Mẫu câu là I'd like + món muốn gọi."]],
+ script:["Hello! What would you like?","I'd like a coffee and a sandwich, please.","Of course. Here you go."],
+ translation:"Xin chào! Bạn muốn dùng gì? — Cho tôi một cà phê và một bánh mì kẹp. — Vâng. Của bạn đây.",
+ listen:["Khách gọi gì?",["Cà phê và bánh mì kẹp","Trà và bánh mì kẹp","Cà phê và nước"]],
+ speak:"Gọi một đồ uống và một món ăn.", model:"I'd like a tea and a sandwich, please.",
+ write:"Viết một câu gọi nước và một câu gọi món ăn.", sample:"I'd like some water, please. I'd like a sandwich.", checks:"Dùng some water và a sandwich. Có thể thêm please."
+},
+{
+ title:"Hỏi đường", en:"Ask for directions", icon:"pin", color:"mint", time:20,
+ intro:"Hỏi một địa điểm và hiểu chỉ dẫn đơn giản.",
+ words:[["excuse me","xin lỗi, cho tôi hỏi","Excuse me, where is the bank?"],["bank","ngân hàng","The bank is on the left."],["station","nhà ga","Where is the station?"],["left","bên trái","Turn left."],["right","bên phải","Turn right."],["straight","thẳng","Go straight."]],
+ rule:"Where is the…?", explain:"Mở lời bằng “Excuse me”. Dùng “Where is the…?” để hỏi địa điểm. “Turn left” là rẽ trái và “go straight” là đi thẳng.",
+ quiz:[["Điền từ · Where ___ the station?","is","Dùng is vì station là một địa điểm."],["Chọn chỉ dẫn đi thẳng",["Go straight.","Turn left.","Turn right."],"Straight ở đây nghĩa là thẳng."],["Xếp câu · bank / Where / the / is","Where is the bank","Mẫu câu hỏi là Where is the + địa điểm."]],
+ script:["Excuse me, where is the station?","Go straight, then turn left.","Thank you!"],
+ translation:"Cho tôi hỏi, nhà ga ở đâu? — Đi thẳng rồi rẽ trái. — Cảm ơn!",
+ listen:["Sau khi đi thẳng, người hỏi cần làm gì?",["Rẽ trái","Rẽ phải","Quay lại"]],
+ speak:"Hỏi đường đến ngân hàng.", model:"Excuse me, where is the bank?",
+ write:"Viết một câu hỏi đường và một câu chỉ đường.", sample:"Excuse me, where is the station? Go straight, then turn left.", checks:"Dùng Where is để hỏi và Turn hoặc Go để chỉ đường."
+},
+{
+ title:"Ôn tập tuần 1", en:"Week one review", icon:"star", color:"lilac", time:20,
+ intro:"Ôn những mẫu câu đã học qua một tình huống ở quán cà phê.",
+ words:[["good morning","chào buổi sáng","Good morning, Ben!"],["name","tên","My name is Anna."],["sister","chị hoặc em gái","This is my sister."],["coffee","cà phê","I'd like a coffee."],["station","nhà ga","Where is the station?"],["go straight","đi thẳng","Go straight to the station."]],
+ rule:"Ôn mẫu câu", explain:"Dùng “My name is…” để giới thiệu, “I'd like…” để gọi món và “Where is the…?” để hỏi đường.",
+ quiz:[["Điền từ · My name ___ Anna.","is","My name đi cùng is."],["Chọn câu gọi cà phê",["I'd like a coffee.","Where is the station?","I have a sister."],"I'd like giúp bạn gọi món."],["Xếp câu · station / Where / the / is","Where is the station","Đặt Where đầu câu rồi đến is the station."]],
+ script:["Good morning! My name is Anna.","Hi, Anna. I'm Ben. What would you like?","I'd like a coffee, please. And where is the station?","Go straight. The station is on the right."],
+ translation:"Chào buổi sáng! Tôi tên Anna. — Chào Anna. Tôi là Ben. Bạn muốn dùng gì? — Cho tôi một cà phê. Và nhà ga ở đâu vậy? — Đi thẳng. Nhà ga nằm bên phải.",
+ listen:["Nhà ga nằm phía nào?",["Bên phải","Bên trái","Phía sau quán"]],
+ speak:"Chào, giới thiệu tên rồi gọi một đồ uống.", model:"Good morning! My name is Anna. I'd like a coffee, please.",
+ write:"Viết một đoạn ba câu gồm chào hỏi, giới thiệu và hỏi đường.", sample:"Good morning! My name is Anna. Where is the station?", checks:"Có đủ lời chào, tên và câu hỏi đường."
+}];
