@@ -44,6 +44,7 @@ export default {
     }
     const {success} = await env.GRADE_LIMIT.limit({key: 'english-steps'});
     if (!success) return send({error:'Bạn vừa chấm nhiều bài. Thử lại sau một phút nhé.'},429);
+    let stage = 'inference';
     try {
       const result = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
         messages:[
@@ -54,7 +55,11 @@ export default {
         max_tokens:850,
         response_format:{type:'json_schema', json_schema:schema},
       });
-      const report = typeof result.response === 'string' ? JSON.parse(result.response) : result.response;
+      stage = 'response';
+      const raw = result.response ?? result.choices?.[0]?.message?.content ?? result;
+      const report = typeof raw === 'string'
+        ? JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/gi, ''))
+        : raw;
       if (!['met','partial','missing'].includes(report?.task) ||
           typeof report.feedback !== 'string' || !Array.isArray(report.edits)) throw Error('Invalid report');
       let end = 0;
@@ -73,8 +78,10 @@ export default {
         end = edit.start + edit.before.length;
       }
       return send({task:report.task, feedback:report.feedback.slice(0,700), edits});
-    } catch {
-      return send({error:'AI chưa trả về kết quả có thể hiển thị. Bạn thử chấm lại nhé.'},502);
+    } catch (error) {
+      const code = String(error?.message ?? '').match(/\b[0-9]{4}\b/)?.[0];
+      console.error('Writing grader failed', stage, error?.name, code ?? '');
+      return send({stage, ...(code ? {code} : {}), error:'AI chưa trả về kết quả có thể hiển thị. Bạn thử chấm lại nhé.'},502);
     }
   },
 };
