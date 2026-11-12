@@ -1,5 +1,11 @@
 name: Render lesson audio
 on:
+  push:
+    branches: [kokoro-audio-v1]
+    paths:
+      - '.github/workflows/lesson-audio.yml'
+      - 'scripts/**'
+      - 'docs/lessons.js'
   workflow_dispatch:
 permissions:
   contents: read
@@ -7,6 +13,8 @@ jobs:
   render:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,13 +26,23 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y espeak-ng ffmpeg
       - run: python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: python -m pip install kokoro==0.9.4 soundfile
-      - shell: bash
+      - name: Generate and validate MP3s
         run: |
-          set -o pipefail
-          if [ -d docs/audio-review ]; then cp -a docs/audio-review audio-review; fi
-          node scripts/lesson-audio.mjs | python scripts/render-audio.py audio-review
+          set -euo pipefail
+          cp -a docs/audio audio-review
+          node scripts/lesson-audio.mjs > audio-jobs.json
+          python scripts/render-audio.py audio-review < audio-jobs.json
+          python scripts/verify-audio.py audio-jobs.json audio-review
       - uses: actions/upload-artifact@v4
         with:
-          name: introduce-yourself-audio
+          name: english-steps-audio
           path: audio-review/
           if-no-files-found: error
+      - name: Commit generated audio on the release branch
+        if: github.ref == 'refs/heads/kokoro-audio-v1'
+        run: |
+          cp audio-review/*.mp3 audio-review/manifest.json docs/audio/
+          git add docs/audio/
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Replace lesson audio with Kokoro recordings'
+          git push origin HEAD:kokoro-audio-v1

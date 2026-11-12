@@ -62,8 +62,7 @@ function roadmap(){
  layout(heading('Lộ trình học','Tuần 1 · 6 bài theo chủ đề và 1 bài ôn tập.')+'<div class="panel"><div class="spread"><h3>Tiến độ tuần 1</h3><span class="pill">'+doneCount()+'/'+lessons.length+' bài</span></div><div class="meter top-space" role="progressbar" aria-label="Tiến độ tuần 1" aria-valuenow="'+doneCount()+'" aria-valuemax="'+lessons.length+'"><span style="width:'+doneCount()/lessons.length*100+'%"></span></div></div><div class="lesson-list">'+lessons.map(lessonCard).join('')+'</div>','Lộ trình','lo-trinh');
 }
 function stopSpeech(){playing?.pause();playing=null;document.querySelectorAll('audio').forEach(audio=>audio.pause())}
-const updatedAudio = new Set(['1-w0', '1-w1', '1-w2', '1-e4', '1-l']);
-const audioUrl = name => './audio/' + name + '.mp3' + (updatedAudio.has(name) ? '?v=2' : '');
+const audioUrl = name => './audio/' + name + '.mp3?v=kokoro-1';
 function playFile(name){stopSpeech();playing=new Audio(audioUrl(name));playing.play().catch(()=>toast('Không phát được audio. Hãy thử lại.'))}
 function checkForm(items,type,key){
  const prev=feedbacks.get(key);
