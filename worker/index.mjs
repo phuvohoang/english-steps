@@ -46,7 +46,7 @@ export default {
     if (!success) return send({error:'Bạn vừa chấm nhiều bài. Thử lại sau một phút nhé.'},429);
     let stage = 'inference';
     try {
-      const result = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+      const result = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
         messages:[
           {role:'system',content:instructions},
           {role:'user',content:JSON.stringify({task, draft})},
