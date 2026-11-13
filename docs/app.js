@@ -66,10 +66,11 @@ const audioUrl = name => './audio/' + name + '.mp3?v=kokoro-1';
 function playFile(name){stopSpeech();playing=new Audio(audioUrl(name));playing.play().catch(()=>toast('Không phát được audio. Hãy thử lại.'))}
 function checkForm(items,type,key){
  const prev=feedbacks.get(key);
- return '<form class="stack" data-form="quiz" data-type="'+type+'" data-key="'+key+'">'+items.map(([prompt,answer],i)=>{
+ return '<form class="stack" data-form="quiz" data-type="'+type+'" data-key="'+key+'">'+items.map(([prompt,answer,,parts],i)=>{
   const result=prev?.[i];
   const options=Array.isArray(answer)?answer.map((value,index)=>({value,index})).sort((a,b)=>(a.index+i+Number(key[0])+2)%answer.length-(b.index+i+Number(key[0])+2)%answer.length):null;
-  return '<fieldset class="exercise"><legend>'+esc(prompt)+'</legend>'+(options?options.map(({value,index})=>'<label class="choice"><input type="radio" required name="q'+i+'" value="'+index+'" '+(result?.value===String(index)?'checked':'')+'> '+esc(value)+'</label>').join(''):'<input aria-label="'+esc(prompt)+'" type="text" required name="q'+i+'" value="'+esc(result?.value)+'" autocomplete="off" placeholder="Nhập câu trả lời">')+'<div class="feedback '+(result?.ok?'ok':'')+'" aria-live="polite" data-feedback="'+i+'">'+esc(result?.message)+'</div></fieldset>';
+  const wordBank=parts?'<p class="muted">Bấm từng cụm từ theo thứ tự hoặc tự gõ cả câu.</p><div class="actions">'+parts.map(part=>button(part,'grammar-part',{value:part,cls:'outline small'})).join('')+button('Xóa câu','grammar-clear',{cls:'outline small'})+'</div>':'';
+  return '<fieldset class="exercise"><legend>'+esc(prompt)+'</legend>'+wordBank+(options?options.map(({value,index})=>'<label class="choice"><input type="radio" required name="q'+i+'" value="'+index+'" '+(result?.value===String(index)?'checked':'')+'> '+esc(value)+'</label>').join(''):'<input aria-label="'+esc(prompt)+'" type="text" required name="q'+i+'" value="'+esc(result?.value)+'" autocomplete="off" placeholder="Nhập câu trả lời">')+'<div class="feedback '+(result?.ok?'ok':'')+'" aria-live="polite" data-feedback="'+i+'">'+esc(result?.message)+'</div></fieldset>';
  }).join('')+'<div><button class="button primary" type="submit">Kiểm tra đáp án</button></div></form>';
 }
 function lessonPage(i,step){
@@ -79,7 +80,12 @@ function lessonPage(i,step){
   const saved=state.words.some(w=>normalize(w.word)===normalize(word)&&normalize(w.meaning)===normalize(meaning));
   return '<div class="row word-row"><div><strong lang="en">'+esc(word)+'</strong><p>'+esc(meaning)+'</p><p class="example" lang="en">'+esc(example)+'</p></div><div class="actions">'+mini('Nghe từ','audio','sound',i+'-w'+j)+mini('Nghe câu ví dụ','audio','book',i+'-e'+j)+button(saved?'Đã lưu':'Lưu từ','save-lesson',{value:i+'-'+j,cls:'small '+(saved?'soft':'outline'),icon:saved?'check':'plus',disabled:saved})+'</div></div>';
  }).join('')+'</section>';
- if(step===1)body='<section class="panel"><h2>'+esc(l.rule)+'</h2><p>'+esc(l.explain)+'</p></section><section class="panel"><h2>Bài tập ngữ pháp</h2>'+checkForm(l.quiz,'grammar',key)+'</section>';
+ if(step===1){
+  const theory=l.theory?l.theory.map(([title,rule,example,translation])=>
+   '<div><h3>'+esc(title)+'</h3><p>'+esc(rule)+'</p><p class="example" lang="en">'+esc(example)+'</p><p class="muted">'+esc(translation)+'</p></div>'
+  ).join(''):'<p>'+esc(l.explain)+'</p>';
+  body='<section class="panel stack"><h2>'+esc(l.rule)+'</h2>'+theory+'</section><section class="panel"><h2>Bài tập ngữ pháp</h2>'+checkForm(l.quiz,'grammar',key)+'</section>';
+ }
  if(step===2)body='<section class="panel"><h2>Nghe đoạn hội thoại</h2><p class="muted">Bạn có thể nghe nhiều lần trước khi trả lời.</p><audio controls preload="metadata" src="'+audioUrl(i+'-l')+'" aria-label="Hội thoại"></audio><div class="actions">'+button('Chậm 0.75×','speed',{value:'0.75',cls:'outline small'})+button('Bình thường 1×','speed',{value:'1',cls:'outline small'})+'</div></section><section class="panel">'+checkForm([l.listen],'listen',key)+'<details '+(feedbacks.has(key)?'':'hidden')+' id="transcript"><summary>Lời thoại và bản dịch</summary><div class="stack"><div lang="en">'+l.script.map(line=>'<p>'+esc(line)+'</p>').join('')+'</div><p class="muted">'+esc(l.translation)+'</p></div></details></section>';
  if(step===3)body='<section class="panel stack"><div><h2>Luyện nói</h2><p>'+esc(l.speak)+'</p></div><p class="example" lang="en">'+esc(l.model)+'</p><div class="actions">'+button('Nghe câu mẫu','audio',{value:i+'-s',icon:'sound'})+'</div><p class="muted">Nghe và nhại theo. Sau đó nói lại bằng thông tin của bạn.</p></section>';
  if(step===4)body='<section class="panel stack"><div><h2>Luyện viết</h2><p>'+esc(l.write)+'</p></div><form class="stack" data-form="writing" data-id="'+i+'"><label class="field">Câu trả lời của bạn<textarea required maxlength="2000" name="draft" placeholder="Viết bằng tiếng Anh…">'+esc(p.draft)+'</textarea></label><div class="actions"><button class="button primary" type="submit">Chấm bài</button>'+button('Xem kết quả mẫu','writing-demo')+'</div><div class="writing-feedback" role="status" aria-live="polite"></div></form><details><summary>Xem bài mẫu và tự kiểm tra</summary><p lang="en">'+esc(l.sample)+'</p><p class="muted">'+esc(l.checks)+'</p></details></section>';
@@ -164,6 +170,18 @@ document.addEventListener('click',async event=>{
  const target=event.target.closest('[data-action]');if(!target)return;
  const {action,value}=target.dataset;
  if(action==='audio')playFile(value);
+ if(action==='grammar-part'||action==='grammar-clear'){
+  const exercise=target.closest('fieldset');
+  const input=exercise.querySelector('input[type="text"]');
+  if(action==='grammar-clear'){
+   input.value='';
+
+  }else{
+   input.value=[input.value.trim(),value].filter(Boolean).join(' ');
+
+  }
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+ }
  if(action==='writing-demo')showWritingExample(target.closest('form'));
  if(action==='say-word')sayWord(state.words.find(w=>w.id===value));
  if(action==='speed'){
@@ -254,8 +272,10 @@ document.addEventListener('submit',async event=>{
   const key=form.dataset.key, lesson=lessons[Number(key[0])], isListen=form.dataset.type==='listen';
   const items=isListen?[lesson.listen]:lesson.quiz;
   const results=items.map(([,answer,why],i)=>{
-   const value=read('q'+i), options=Array.isArray(answer), ok=options?value==='0':normalize(value)===normalize(answer);
-   return {value,ok,message:(ok?'Đúng! ':'Đáp án: '+(options?answer[0]:answer)+'. ')+(why??'')};
+   const value=read('q'+i), options=Array.isArray(answer), ok=options?value==='0':normalize(value.trim())===normalize(answer);
+   const correct=options?answer[0]:answer;
+   const punctuation=/[.!?]$/.test(correct)?' ':'. ';
+   return {value,ok,message:(ok?'Đúng! ':'Đáp án: '+correct+punctuation)+(why??'')};
   });
   feedbacks.set(key,results);
   results.forEach((r,i)=>{const element=form.querySelector('[data-feedback="'+i+'"]');element.textContent=r.message;element.classList.toggle('ok',r.ok)});
@@ -275,7 +295,11 @@ document.addEventListener('submit',async event=>{
   review.result={typed,ok:normalize(typed)===normalize(w.word)};review.revealed=true;render();
  }
 });
-document.addEventListener('input',event=>{if(event.target.id==='lookup-word')document.querySelector('#lookup-results').innerHTML=lookupRows(event.target.value);if(event.target.id==='search'){query=event.target.value;document.querySelector('#word-rows').innerHTML=wordRows()}});
+document.addEventListener('input',event=>{
+ const exercise=event.target.closest('form[data-form="quiz"] .exercise');
+ const feedback=exercise?.querySelector('[data-feedback]');
+ if(feedback){feedback.textContent='';feedback.classList.remove('ok')}
+ if(event.target.id==='lookup-word')document.querySelector('#lookup-results').innerHTML=lookupRows(event.target.value);if(event.target.id==='search'){query=event.target.value;document.querySelector('#word-rows').innerHTML=wordRows()}});
 document.addEventListener('change',event=>{if(event.target.id==='deck-filter'){deckFilter=event.target.value;document.querySelector('#word-rows').innerHTML=wordRows()}});
 async function navigate(){
  stopSpeech();if(dialog.open)dialog.close();
