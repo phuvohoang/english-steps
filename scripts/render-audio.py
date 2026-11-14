@@ -15,7 +15,7 @@ manifest = json.loads(manifest_file.read_text()) if manifest_file.exists() else 
 pending = []
 for job in jobs:
     clip_id = job["id"]
-    if not re.fullmatch(r"[0-9]+-(?:[we][0-9]+|[ls])", clip_id):
+    if not re.fullmatch(r"(?:[0-9]+-(?:[we][0-9]+|[ls])|listening_01_[0-9]{2})", clip_id):
         raise ValueError(f"Unexpected clip ID: {clip_id}")
     digest = hashlib.sha256(json.dumps(
         ["kokoro-0.9.4", "hexgrad/Kokoro-82M", "24k-mp3-0.32-gap-v1", job],
