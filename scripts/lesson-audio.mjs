@@ -31,4 +31,7 @@ const jobs = lessons.flatMap((lesson, i) => {
     })) },
   ];
 });
+const listeningSource = readFileSync(new URL('../docs/listening-01.js', import.meta.url), 'utf8');
+const listeningJobs = runInNewContext(listeningSource + '\nlistening01.map(([text], i) => ({id: listening01Clip(i), parts: [{text, voice: i % 2 ? "am_michael" : "af_heart"}]}))', {document:{addEventListener(){}}}, {timeout: 1000});
+jobs.push(...listeningJobs);
 process.stdout.write(JSON.stringify(jobs, null, 2) + '\n');
