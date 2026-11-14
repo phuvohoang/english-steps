@@ -26,3 +26,6 @@ main{margin-left:238px;padding:38px 40px 54px}.wrap{max-width:1160px;margin:auto
 .grammar-words thead{background:var(--lav)}
 [data-form="grammar-01"] .exercise{min-width:0}
 [data-form="grammar-01-writing"] .writing-diff p{white-space:pre-wrap}
+
+.selection-save{position:fixed;z-index:4;box-shadow:0 4px 16px #20223a38;min-height:36px;}
+.selection-save[hidden]{display:none;}
