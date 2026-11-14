@@ -80,7 +80,8 @@ function lessonPage(i,step){
   const saved=state.words.some(w=>normalize(w.word)===normalize(word)&&normalize(w.meaning)===normalize(meaning));
   return '<div class="row word-row"><div><strong lang="en">'+esc(word)+'</strong><p>'+esc(meaning)+'</p><p class="example" lang="en">'+esc(example)+'</p></div><div class="actions">'+mini('Nghe từ','audio','sound',i+'-w'+j)+mini('Nghe câu ví dụ','audio','book',i+'-e'+j)+button(saved?'Đã lưu':'Lưu từ','save-lesson',{value:i+'-'+j,cls:'small '+(saved?'soft':'outline'),icon:saved?'check':'plus',disabled:saved})+'</div></div>';
  }).join('')+'</section>';
- if(step===1){
+ if(step===1&&i===0)body=grammar01Page(p);
+ else if(step===1){
   const theory=l.theory?l.theory.map(([title,rule,example,translation])=>
    '<div><h3>'+esc(title)+'</h3><p>'+esc(rule)+'</p><p class="example" lang="en">'+esc(example)+'</p><p class="muted">'+esc(translation)+'</p></div>'
   ).join(''):'<p>'+esc(l.explain)+'</p>';
@@ -141,7 +142,7 @@ function exportData(){
 }
 function validBackup(data){
  const validText=(s,max,required=false)=>typeof s==='string'&&s.length<=max&&(!required||!!s.trim());
- return data?.format==='english-steps'&&data.version===1&&Array.isArray(data.decks)&&data.decks.length<=500&&data.decks.every(d=>validText(d,50,true))&&Array.isArray(data.words)&&data.words.length<=10000&&data.words.every(w=>w&&validText(w.id,100,true)&&validText(w.word,140,true)&&validText(w.meaning,180,true)&&validText(w.example,300)&&validText(w.note,300)&&data.decks.includes(w.deck)&&Number.isFinite(w.due)&&w.due>=0&&w.due<=8640000000000000&&Number.isInteger(w.interval)&&w.interval>=0&&w.interval<=60&&typeof w.wrong==='boolean'&&(!w.audio||/^[0-6]-w[0-5]$/.test(w.audio)))&&data.progress&&typeof data.progress==='object'&&!Array.isArray(data.progress)&&Object.entries(data.progress).every(([id,p])=>/^[0-6]$/.test(id)&&p&&Number.isInteger(p.tab)&&p.tab>=0&&p.tab<=4&&(p.done===undefined||typeof p.done==='boolean')&&(p.draft===undefined||validText(p.draft,2000)));
+ return data?.format==='english-steps'&&data.version===1&&Array.isArray(data.decks)&&data.decks.length<=500&&data.decks.every(d=>validText(d,50,true))&&Array.isArray(data.words)&&data.words.length<=10000&&data.words.every(w=>w&&validText(w.id,100,true)&&validText(w.word,140,true)&&validText(w.meaning,180,true)&&validText(w.example,300)&&validText(w.note,300)&&data.decks.includes(w.deck)&&Number.isFinite(w.due)&&w.due>=0&&w.due<=8640000000000000&&Number.isInteger(w.interval)&&w.interval>=0&&w.interval<=60&&typeof w.wrong==='boolean'&&(!w.audio||/^[0-6]-w[0-5]$/.test(w.audio)))&&data.progress&&typeof data.progress==='object'&&!Array.isArray(data.progress)&&Object.entries(data.progress).every(([id,p])=>/^[0-6]$/.test(id)&&p&&Number.isInteger(p.tab)&&p.tab>=0&&p.tab<=4&&(p.done===undefined||typeof p.done==='boolean')&&(p.draft===undefined||validText(p.draft,2000))&&(p.grammar01Best===undefined||(Number.isInteger(p.grammar01Best)&&p.grammar01Best>=0&&p.grammar01Best<=20))&&(p.grammar01Sentences===undefined||(Array.isArray(p.grammar01Sentences)&&p.grammar01Sentences.length===5&&p.grammar01Sentences.every(sentence=>validText(sentence,180,true)))));
 }
 importInput.addEventListener('change',async()=>{
  const file=importInput.files[0];importInput.value='';if(!file)return;
@@ -161,7 +162,7 @@ importInput.addEventListener('change',async()=>{
   }
   for(const [id, incoming] of Object.entries(data.progress)){
    const current=profile.progress[id];
-   profile.progress[id]=current?{tab:current.tab,done:!!(current.done||incoming.done),draft:current.draft??incoming.draft}:{tab:incoming.tab,done:!!incoming.done,draft:incoming.draft};
+   profile.progress[id]=current?{tab:current.tab,done:!!(current.done||incoming.done),draft:current.draft??incoming.draft,grammar01Best:Math.max(current.grammar01Best??0,incoming.grammar01Best??0),grammar01Sentences:current.grammar01Sentences??incoming.grammar01Sentences}:{tab:incoming.tab,done:!!incoming.done,draft:incoming.draft,grammar01Best:incoming.grammar01Best,grammar01Sentences:incoming.grammar01Sentences};
   }
  })){render();toast('Đã gộp bản sao với dữ liệu hiện có.')}
 });
@@ -169,6 +170,7 @@ function sayWord(w){if(w?.audio)playFile(w.audio);else if(w)toast("Từ này ch�
 document.addEventListener('click',async event=>{
  const target=event.target.closest('[data-action]');if(!target)return;
  const {action,value}=target.dataset;
+ if(action.startsWith('grammar-01-'))await grammar01Action(action,target.closest('form'));
  if(action==='audio')playFile(value);
  if(action==='grammar-part'||action==='grammar-clear'){
   const exercise=target.closest('fieldset');
@@ -236,6 +238,8 @@ document.addEventListener('submit',async event=>{
  const form=event.target, type=form.dataset.form;if(!type)return;
  event.preventDefault();
  const data=new FormData(form), read=name=>String(data.get(name)??'').trim(), id=form.dataset.id;
+ if(type==='grammar-01')await grammar01GradeQuiz(form);
+ if(type==='grammar-01-writing')await grammar01GradeWriting(form);
  if(type==='word'){
   const word=read('word'), meaning=read('meaning'), deck=read('deck');
   if(!word||!meaning){toast('Nhập từ tiếng Anh và nghĩa tiếng Việt.');return}
@@ -296,6 +300,19 @@ document.addEventListener('submit',async event=>{
  }
 });
 document.addEventListener('input',event=>{
+ const grammarQuiz=event.target.closest('form[data-form="grammar-01"]');
+ if(grammarQuiz){
+  grammar01UpdateCount(grammarQuiz);
+  const message=event.target.closest('fieldset').querySelector('[data-grammar-feedback]');
+  message.textContent='';
+  message.classList.remove('ok');
+  grammarQuiz.querySelector('[data-grammar-score]').textContent='';
+ }
+ const grammarWriting=event.target.closest('form[data-form="grammar-01-writing"]');
+ if(grammarWriting){
+  grammarWriting.elements.draft.value=grammar01Sentences(grammarWriting).join('\n');
+  grammarWriting.querySelector('.writing-feedback').textContent='';
+ }
  const exercise=event.target.closest('form[data-form="quiz"] .exercise');
  const feedback=exercise?.querySelector('[data-feedback]');
  if(feedback){feedback.textContent='';feedback.classList.remove('ok')}
