@@ -20,3 +20,9 @@ main{margin-left:238px;padding:38px 40px 54px}.wrap{max-width:1160px;margin:auto
 .writing-notes span { color:#403476; }
 .writing-notes p { color:#535064; }
 @media(max-width:640px) { .writing-diff { grid-template-columns:1fr; } }
+
+.grammar-words{width:100%;border-collapse:collapse;margin:1rem 0;overflow-wrap:anywhere}
+.grammar-words th,.grammar-words td{padding:.5rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.grammar-words thead{background:var(--lav)}
+[data-form="grammar-01"] .exercise{min-width:0}
+[data-form="grammar-01-writing"] .writing-diff p{white-space:pre-wrap}
