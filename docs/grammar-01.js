@@ -93,8 +93,18 @@ function grammar01Theory() {
    <ul><li><span lang="en"><strong>I</strong> eat rice.</span> — Tôi ăn cơm.</li><li><span lang="en"><strong>She</strong> reads books.</span> — Cô ấy đọc sách.</li><li><span lang="en"><strong>The cat</strong> sleeps.</span> — Con mèo ngủ.</li></ul>
    <h4>5.2. Động từ (Verb · V)</h4><p>Động từ cho biết chủ ngữ làm gì hoặc ở trạng thái nào.</p>
    <ul><li lang="en">I <strong>eat</strong> rice.</li><li lang="en">She <strong>reads</strong> books.</li><li lang="en">The cat <strong>sleeps</strong>.</li></ul>
-   <h4>5.3. Tân ngữ (Object · O)</h4><p>Tân ngữ thường chỉ người hoặc vật mà hành động hướng tới.</p>
-   <ul><li><span lang="en">I eat <strong>rice</strong>.</span> — Tôi ăn cơm.</li><li><span lang="en">She reads <strong>books</strong>.</span> — Cô ấy đọc sách.</li><li><span lang="en">They play <strong>football</strong>.</span> — Họ chơi bóng đá.</li></ul>
+   <h4>5.3. Tân ngữ (Object · O)</h4>
+   <p><strong>Tân ngữ cho biết hành động hướng đến ai hoặc cái gì.</strong> Trong câu <span lang="en">I eat rice.</span> (Tôi ăn cơm), <strong>I</strong> là người ăn, còn <strong>rice</strong> là thứ được ăn. Vì vậy, <strong>rice</strong> là tân ngữ.</p>
+   <p><strong>Cách tìm tân ngữ trực tiếp.</strong> Tìm động từ trước, rồi hỏi “<strong>động từ + ai?</strong>” hoặc “<strong>động từ + cái gì?</strong>” Ví dụ, <span lang="en">They play <strong>football</strong>.</span> nghĩa là “Họ chơi bóng đá”. Hỏi “Họ chơi gì?” → “bóng đá”. Vậy <strong>football</strong> là tân ngữ.</p>
+   <p><strong>Danh từ và đại từ là từ loại. Tân ngữ là vai trò của một từ hoặc một cụm từ trong câu.</strong> Ở bài này, hãy nhớ ba dạng thường gặp:</p>
+   <ul>
+    <li><strong>Danh từ.</strong> <span lang="en">She reads <strong>books</strong>.</span> — Cô ấy đọc sách. Cô ấy đọc gì? → <strong>books</strong> (sách).</li>
+    <li><strong>Cụm danh từ</strong> (một nhóm từ có danh từ làm chính). <span lang="en">She reads <strong>a new book</strong>.</span> — Cô ấy đọc một quyển sách mới. Tân ngữ là cả cụm <strong>a new book</strong>. Trong cụm này, <strong>book</strong> là danh từ chính và <strong>new</strong> mô tả quyển sách.</li>
+    <li><strong>Đại từ tân ngữ</strong> (từ dùng để thay cho người hoặc vật đã nhắc tới). <span lang="en">I see <strong>Mai</strong>. I see <strong>her</strong>.</span> — Tôi nhìn thấy Mai. Tôi nhìn thấy cô ấy. <strong>Her</strong> thay cho <strong>Mai</strong>. Các dạng thường gặp là <span lang="en">me, you, him, her, it, us, them</span>.</li>
+   </ul>
+   <p><strong>Cùng một danh từ có thể giữ vai trò khác nhau.</strong> Trong <span lang="en"><strong>Mai</strong> reads a book.</span> (Mai đọc sách), <strong>Mai</strong> là chủ ngữ. Trong <span lang="en">I see <strong>Mai</strong>.</span> (Tôi nhìn thấy Mai), <strong>Mai</strong> là tân ngữ.</p>
+   <p><strong>Thử tự tìm.</strong> Trong <span lang="en">I have a small cat.</span> (Tôi có một con mèo nhỏ), hãy hỏi “Tôi có gì?”</p>
+   <details><summary>Xem đáp án</summary><p>Tân ngữ là <strong lang="en">a small cat</strong> (một con mèo nhỏ). Đây là một cụm danh từ, với <strong lang="en">cat</strong> là danh từ chính.</p></details>
   </div>
   <div><h3>6. Phân tích một câu hoàn chỉnh</h3><p class="example" lang="en">I drink water.</p>
    <table class="grammar-words"><thead><tr><th scope="col">Chủ ngữ (S)</th><th scope="col">Động từ (V)</th><th scope="col">Tân ngữ (O)</th></tr></thead><tbody><tr><td lang="en"><strong>I</strong></td><td lang="en"><strong>drink</strong></td><td lang="en"><strong>water</strong></td></tr><tr><td>Tôi</td><td>uống</td><td>nước</td></tr></tbody></table>
